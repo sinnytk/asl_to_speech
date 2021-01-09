@@ -1,0 +1,18 @@
+{% extends 'index.html' %} {% block content %}
+<header>
+  <div class="container-fluid">{% include "home/banner.html" %}</div>
+</header>
+<div class="container">
+  <div class="btn-container" align="center">
+    <a href="/app" id="appBtn" class="btn btn-lg" role="button">LAUNCH APP</a>
+  </div>
+  <footer pt-4 my-md-5 pt-md-5 border-top>
+    <div class="row px-5 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+      <p class="lead">
+        A research based project to use Deep Learning accompanied with Computer
+        Vision algorithms to give voice to the deaf-mute community.
+      </p>
+    </div>
+  </footer>
+</div>
+{% endblock %}

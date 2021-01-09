@@ -2,11 +2,3 @@
 html body {
   font-family: "Roboto", sans-serif;
 }
-#appBtn {
-  color: #6d584f;
-  border: 1px solid #6d584f;
-}
-#appBtn:hover {
-  background-color: #6d584f;
-  color: white;
-}

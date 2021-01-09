@@ -1,4 +1,6 @@
-{% extends 'index.html' %} {% block content %}
+{% extends 'index.html' %} {% load static %} {% block headers %}
+<link rel="stylesheet" href="{% static 'home/css/home.css' %}" />
+{% endblock %} {% block content %}
 <header>
   <div class="container-fluid">{% include "home/banner.html" %}</div>
 </header>

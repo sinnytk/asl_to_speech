@@ -1,0 +1,36 @@
+{% extends 'app/base_app.html' %} {% load static %} {% block headers %}
+<link rel="stylesheet" href="{% static 'app/css/base_app.css' %}" />
+<script src="{% static 'app/js/camera_app.js' %}"></script>
+
+{% endblock %}{% block app_details %}
+<div class="row justify-content-center heading">
+  <h1>Convert camera input</h1>
+</div>
+<div class="row justify-content-center subheading">
+  <p class="lead">
+    Use ASL signs with your camera and convert them to annotations
+  </p>
+</div>
+{% endblock %} {% block upload_form %}
+<form id="file-upload-form" class="uploader" method="POST">
+  {% csrf_token %}
+  <label for="file-uploader" id="file-drag">
+    <video id="file-image"></video>
+    <div id="start">
+      <i class="fa fa-download" aria-hidden="true"></i>
+      <div>Click below to start video capture</div>
+      <span id="file-upload-btn" class="btn btn-primary"
+        >Start video capture</span
+      >
+    </div>
+    <div id="response" class="hidden">
+      <div id="messages"></div>
+      <progress class="progress" id="file-progress" value="0">
+        <span>0</span>%
+      </progress>
+    </div>
+  </label>
+</form>
+{% endblock %} {% block output_block %}
+<p class="output video"></p>
+{% endblock %}

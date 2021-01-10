@@ -4,14 +4,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'css/index.css' %}" />
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
       integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="{% static 'css/index.css' %}" />
-    {% block headers %}{% endblock %}
     <script
       src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
       integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
@@ -27,11 +27,12 @@
       integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
       crossorigin="anonymous"
     ></script>
+    {% block headers %}{% endblock %}
     <title>ASL To Speech</title>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="#">ASL To Speech</a>
+      <a class="navbar-brand" href="/">ASL To Speech</a>
       <button
         class="navbar-toggler"
         type="button"
@@ -47,7 +48,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="/">Home</a>
+            <a class="nav-link" href="{% url 'home:index' %}">Home</a>
           </li>
           <li class="nav-item dropdown">
             <a
@@ -62,10 +63,12 @@
               App
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="/app/image">Image</a>
-              <a class="dropdown-item" href="/app/video">Video</a>
+              <a class="dropdown-item" href="{% url 'app:image'%}">Image</a>
+              <a class="dropdown-item" href="{% url 'app:video'%}">Video</a>
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="/app/camera">Camera Input</a>
+              <a class="dropdown-item" href="{% url 'app:camera'%}"
+                >Camera Input</a
+              >
             </div>
           </li>
           <li class="nav-item">

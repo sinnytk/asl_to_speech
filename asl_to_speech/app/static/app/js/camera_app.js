@@ -16,7 +16,7 @@ function start_mock_translation() {
 }
 $(document).ready(function () {
   $("#file-upload-btn").click(function () {
-    var constraints = { audio: true, video: { width: 1280, height: 720 } };
+    var constraints = { audio: false, video: { width: 1280, height: 720 } };
     navigator.mediaDevices
       .getUserMedia(constraints)
       .then(function (mediaStream) {

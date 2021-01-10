@@ -16,7 +16,10 @@
             Some quick example text to build on the card title and make up the
             bulk of the card's content.
           </p>
-          <a href="#" class="btn btn btn-lg appBtn" role="button"
+          <a
+            href="{% url 'app:image' %}"
+            class="btn btn btn-lg appBtn"
+            role="button"
             >ANNOTATE IMAGE</a
           >
         </div>
@@ -35,7 +38,10 @@
             Some quick example text to build on the card title and make up the
             bulk of the card's content.
           </p>
-          <a href="#" class="btn btn btn-lg appBtn" role="button"
+          <a
+            href="{% url 'app:camera' %}"
+            class="btn btn btn-lg appBtn"
+            role="button"
             >ANNOTATE CAMERA INPUT</a
           >
         </div>
@@ -54,7 +60,12 @@
             Some quick example text to build on the card title and make up the
             bulk of the card's content.
           </p>
-          <a href="#" class="btn btn-lg appBtn" role="button">ANNOTATE VIDEO</a>
+          <a
+            href="{% url 'app:video' %}"
+            class="btn btn-lg appBtn"
+            role="button"
+            >ANNOTATE VIDEO</a
+          >
         </div>
       </div>
     </div>

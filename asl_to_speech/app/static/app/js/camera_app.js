@@ -148,6 +148,9 @@ $(document).ready(function () {
     photo.classList.add("hidden");
     photo.setAttribute("src", "");
     if (!isCameraInput) {
+      var annotationHtml = document.getElementsByClassName(
+        "annotation-section"
+      )[0];
       annotationHtml.style.display = "none";
       document.getElementsByClassName("output")[0].innerHTML = "";
       var constraints = { audio: false, video: { width: 1280, height: 720 } };

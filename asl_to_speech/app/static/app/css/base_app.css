@@ -125,3 +125,6 @@ p.output.image {
 .output {
   font-size: 10em;
 }
+.output.small {
+  font-size: 1em;
+}

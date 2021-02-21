@@ -5,7 +5,7 @@ from django.http import JsonResponse
 
 
 def index(request):
-    return JsonResponse(data={"hi": "hello"})
+    return JsonResponse(data={"test": "test"})
 
 
 def annotate_image(request):

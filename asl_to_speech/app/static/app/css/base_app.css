@@ -1,3 +1,6 @@
+.hidden {
+  display: none !important;
+}
 .upload-section {
   margin: 0 auto;
   border: 1px solid red;
@@ -40,13 +43,10 @@
   clear: both;
   width: 100%;
 }
-.uploader #response.hidden {
-  display: none;
-}
 .uploader #response #messages {
   margin-bottom: 0.5rem;
 }
-.uploader #file-image {
+.uploader .annotation-input {
   display: inline;
   margin: 0 auto 0.5rem auto;
   width: auto;
@@ -54,17 +54,11 @@
   max-width: 42vh;
   max-height: 32vh;
 }
-.uploader #file-image.hidden {
-  display: none;
-}
 .uploader #notimage {
   display: block;
   float: left;
   clear: both;
   width: 100%;
-}
-.uploader #notimage.hidden {
-  display: none;
 }
 .uploader progress,
 .uploader .progress {
@@ -126,5 +120,8 @@
   display: none;
 }
 p.output.image {
+  font-size: 10em;
+}
+.output {
   font-size: 10em;
 }

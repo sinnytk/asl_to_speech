@@ -12,13 +12,32 @@
   </p>
 </div>
 {% endblock %} {% block upload_form %}
-<form id="file-upload-form" class="uploader" method="POST">
+<form
+  id="file-upload-form"
+  class="uploader"
+  method="POST"
+  action="{% url 'model:annotate_image' %}"
+>
   {% csrf_token %}
   <label for="file-uploader" id="file-drag">
-    <video id="file-image"></video>
+    <video
+      id="file-image"
+      style="display: none"
+      class="annotation-input"
+    ></video>
+    <canvas id="rectangle" class="annotation-input"></canvas>
+    <img
+      id="photo"
+      src=""
+      alt="captured_image"
+      class="img-fluid annotation-input hidden"
+    />
     <div id="start">
       <i class="fa fa-download" aria-hidden="true"></i>
       <div>Click below to start video capture</div>
+      <span id="capture-btn" class="btn btn-primary disabled hidden"
+        >Take photo</span
+      >
       <span id="file-upload-btn" class="btn btn-primary"
         >Start video capture</span
       >

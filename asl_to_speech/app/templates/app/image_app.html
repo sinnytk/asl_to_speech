@@ -8,7 +8,12 @@
   <p class="lead">Convert any image containing ASL hand sign to annotation</p>
 </div>
 {% endblock %} {% block upload_form %}
-<form id="file-upload-form" class="uploader" method="POST">
+<form
+  id="file-upload-form"
+  class="uploader"
+  method="POST"
+  action="{% url 'model:annotate_image'%}"
+>
   {% csrf_token %}
   <input id="file-upload" type="file" name="fileUpload" accept="image/*" />
   <label for="file-upload" id="file-drag">

@@ -1,8 +1,11 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import os
+import numpy as np
 import cv2
+import json
+
+from .label_mapping import label_mappings
 
 
 class Net(nn.Module):
@@ -54,8 +57,10 @@ def load_model(model_path):
 
 
 def make_inference(model, input_image):
-    img = cv2.imread(input_image, cv2.IMREAD_GRAYSCALE)
+    img = cv2.imdecode(np.frombuffer(
+        input_image.read(), np.uint8), cv2.IMREAD_GRAYSCALE)
     img = cv2.resize(img, (100, 100))/255
     img = torch.Tensor(img).view(-1, 1, 100, 100)
     prediction = torch.argmax(model(img))
-    return prediction.item()
+    label = label_mappings[prediction.item()]
+    return label

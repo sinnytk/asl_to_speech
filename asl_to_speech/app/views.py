@@ -7,8 +7,6 @@ def index(request):
 
 
 def image(request):
-    if request.method == "POST":
-        return JsonResponse({"annotation": "A"})
 
     return render(request, "app/image_app.html", {})
 

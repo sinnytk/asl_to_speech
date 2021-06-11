@@ -3,4 +3,6 @@ env
 *.pyc
 __pycache__
 .vscode
+*.npy
 model/data
+model/.ipynb_checkpoints/

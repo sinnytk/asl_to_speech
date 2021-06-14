@@ -50,7 +50,7 @@ class Net(nn.Module):
 
 def load_model(model_path):
     model = Net()
-    model.load_state_dict(torch.load(model_path))
+    model.load_state_dict(torch.load(model_path, map_location='cpu'))
     model.eval()
 
     return model

@@ -48,7 +48,7 @@ def main():
         dest_path = Path(sys.argv[2])
 
     if not os.path.exists(dest_path):
-        os.mkdir(dest_path)
+        os.makedirs(dest_path)
 
     if os.path.exists(video_path):
         split_frames(video_path, dest_path)

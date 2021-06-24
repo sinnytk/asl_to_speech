@@ -6,3 +6,5 @@ __pycache__
 *.npy
 model/data
 model/.ipynb_checkpoints/
+*.pt
+*.tbh

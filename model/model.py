@@ -72,9 +72,14 @@ class Net(nn.Module):
             'val_losses': []
         }
 
+        # move to GPU if available, otherwise use CPU
+        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+        print(f'On device: {torch.cuda.get_device_name(0)}')    
+        self.to(device)
+
         _optimizer = optimizer(self.parameters(), lr=learning_rate)
         _loss_function = loss_function() 
-        
+
         t_progress_bar = tqdm(range(num_of_epochs))
         for epoch in t_progress_bar:
             avg_epoch_acc = []
@@ -84,9 +89,12 @@ class Net(nn.Module):
 
             for i in range(0, len(train_X),train_batch_size):
                 batch_X = train_X[i:i+train_batch_size].view(-1,1,
-                                                             self.image_size,self.image_size)
+                                                                self.image_size,self.image_size)
                 batch_y = train_y[i:i+train_batch_size]
-            
+
+                batch_X = batch_X.to(device)
+                batch_y = batch_y.to(device)
+
                 self.zero_grad()
                 
                 outputs = self(batch_X)
@@ -144,16 +152,10 @@ def main():
     # init the model
     net = Net(kernel_size=1)
     
-    # move to GPU if available, otherwise use CPU
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    print(f'On device: {torch.cuda.get_device_name(0)}')
-    net.to(device)
 
     # load the generated data into tensors
     print('Loading data...')
     X, y = load(path = config['TRAINING_DATA_PATH'], image_size = config['IMAGE_SIZE'])
-    X.to(device)
-    y.to(device)
 
     train_X, train_y, test_X, test_y = split(X,y, split = 0.8)
 
@@ -161,7 +163,7 @@ def main():
 
     # Training
     print('Start training')
-    history = net._train(train_X.to(device), train_y.to(device), test_X.to(device), test_y.to(device))
+    history = net._train(train_X, train_y, test_X, test_y)
     print('Trained!')
     print(history)
 

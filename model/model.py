@@ -154,7 +154,23 @@ def main():
     print('Start training')
     history = net._train(train_X, train_y, test_X, test_y)
     print('Trained!')
-    print(history)
+
+    fig, axs = plt.subplots(2)
+    fig.suptitle('Training performance')
+    axs[0].plot(history['train_accuracies'], label='Training Accuracy')
+    axs[0].plot(history['val_accuracies'], label='Validation Accuracy')
+    
+    axs[0].set_xlabel("No. of EPOCHS")
+    axs[0].set_ylabel("Accuracy")
+
+    axs[1].plot(history['train_losses'], label='Training Loss')
+    axs[1].plot(history['val_losses'], label='Validation Loss')
+    
+    axs[1].set_xlabel("No. of EPOCHS")
+    axs[1].set_ylabel("Loss")
+
+    plt.legend()
+    plt.show()
 
 if __name__ == '__main__':
     main()

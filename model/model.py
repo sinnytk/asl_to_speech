@@ -11,7 +11,7 @@ from mappings import label_mappings
 from utils import load, split
 
 class Net(nn.Module):
-    def __init__(self, image_size = 100, kernel_size = 5):
+    def __init__(self, image_size = 100, kernel_size = 3):
         super().__init__()
         self.kernel_size = kernel_size
         self.image_size = image_size
@@ -60,7 +60,7 @@ class Net(nn.Module):
 
     def _train(self, train_X, train_y, # training data
                     val_X, val_y, # validation data
-                    train_batch_size = 64, val_batch_size = 64, # batch sizes
+                    train_batch_size = 128, val_batch_size = 128, # batch sizes
                     num_of_epochs = 10, # epochs
                     optimizer = optim.Adam, loss_function = nn.BCELoss, # extra functions
                     learning_rate = 0.001):

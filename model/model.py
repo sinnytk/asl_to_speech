@@ -1,4 +1,3 @@
-from numpy.lib.function_base import average
 import torch
 import random
 import argparse

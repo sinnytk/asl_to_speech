@@ -82,11 +82,8 @@ class Net(nn.Module):
 
         t_progress_bar = tqdm(range(num_of_epochs))
         for epoch in t_progress_bar:
-            avg_epoch_acc = []
-            avg_epoch_loss = []
-            avg_epoch_val_acc = []
-            avg_epoch_val_loss = []
-
+            acc = 0.0
+            loss = 0.0
             for i in range(0, len(train_X),train_batch_size):
                 batch_X = train_X[i:i+train_batch_size].view(-1,1,
                                                                 self.image_size,self.image_size)
@@ -99,39 +96,30 @@ class Net(nn.Module):
                 
                 outputs = self(batch_X)
                 
-                loss = _loss_function(outputs, batch_y)
-                loss.backward()
-                avg_epoch_loss.append(loss.item())
-                
+                batch_loss = _loss_function(outputs, batch_y)
+                batch_loss.backward()    
                 _optimizer.step()
                 
-                acc = self.acc_score(outputs,batch_y)
-                avg_epoch_acc.append(acc)
+                acc += self.acc_score(outputs, batch_y)
+                loss += batch_loss.item()
 
                 
+            acc = acc/(len(train_X)/train_batch_size)
+            loss = loss/(len(train_X)/train_batch_size)
+
+            with torch.no_grad():
                 rand_split = random.randint(0,len(val_X)-val_batch_size)
-                val_output = self(val_X[rand_split:rand_split+val_batch_size])
+                val_batch = val_X[rand_split:rand_split+val_batch_size].to(device)
+                val_output = self(val_batch)
                 val_acc = self.acc_score(val_output, val_y[rand_split:rand_split + val_batch_size])
-                val_loss = _loss_function(val_output, val_y[rand_split:rand_split + val_batch_size])
-                avg_epoch_val_acc.append(val_acc)
-                avg_epoch_val_loss.append(val_loss)
+                val_loss = _loss_function(val_output, val_y[rand_split:rand_split + val_batch_size].to(device)).item()
                 
-            avg_epoch_acc = np.array(avg_epoch_acc).mean()
-            avg_epoch_loss = np.array(avg_epoch_loss).mean()
-            avg_epoch_val_acc = np.array(avg_epoch_val_acc).mean()
-            avg_epoch_val_loss = np.array(avg_epoch_val_loss).mean()
-            
-            results['train_accuracies'].append(avg_epoch_acc)
-            results['train_losses'].append(avg_epoch_loss)
-            results['val_accuracies'].append(avg_epoch_val_acc)
-            results['val_losses'].append(avg_epoch_val_loss)
+            results['train_accuracies'].append(acc)
+            results['train_losses'].append(loss)
+            results['val_accuracies'].append(val_acc)
+            results['val_losses'].append(val_loss)
 
-
-            t_progress_bar.set_description(f'EPOCH: {epoch}, \
-                                             TRAIN_ACC: {avg_epoch_acc}, \
-                                             TRAIN_LOSS: {avg_epoch_loss}, \
-                                             VAL_ACC: {avg_epoch_val_acc}, \
-                                             VAL_LOSS: {avg_epoch_val_loss}')
+            t_progress_bar.set_description(f'EPOCH: {epoch},TRAIN_ACC: {round(val_acc,4)},TRAIN_LOSS: {round(loss,4)},VAL_ACC: {val_acc},VAL_LOSS: {val_loss}')
         return results
 
 def create_config():

@@ -150,7 +150,8 @@ def main():
     config = create_config()
 
     # init the model
-    net = Net(kernel_size=1)
+
+    torch.cuda.empty_cache() 
     
 
     # load the generated data into tensors

@@ -138,7 +138,7 @@ def main():
     config = create_config()
 
     # init the model
-
+    net = Net(kernel_size=3)
     torch.cuda.empty_cache() 
     
 
@@ -152,7 +152,7 @@ def main():
 
     # Training
     print('Start training')
-    history = net._train(train_X, train_y, test_X, test_y)
+    history = net._train(train_X, train_y, test_X, test_y, num_of_epochs=15)
     print('Trained!')
 
     fig, axs = plt.subplots(2)

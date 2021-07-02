@@ -177,5 +177,22 @@ def main():
     axs[1].legend()
     plt.show()
 
+    print('Testing...')
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+
+    correct = 0 
+    total = 0 
+    net.eval()
+
+    with torch.no_grad():
+        for i in tqdm(range(len(test_X))):
+            real_class = torch.argmax(test_y[i])
+            net_out = net(test_X[i].view(-1,1,IMAGE_SIZE,IMAGE_SIZE).to(device))[0]
+            predicted_class = torch.argmax(net_out)
+            if predicted_class == real_class:
+                correct+=1
+            total+=1
+        print('Accuracy:',round(correct/total,3))
+    torch.save(net.state_dict(),'2x2_batchnorm_6_layers.pt')
 if __name__ == '__main__':
     main()

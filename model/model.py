@@ -99,8 +99,8 @@ class Net(nn.Module):
                 batch_loss = _loss_function(outputs, batch_y)
                 batch_loss.backward()    
                 _optimizer.step()
-                
-                acc += self.acc_score(outputs, batch_y)
+                local_acc = self.acc_score(outputs, batch_y)
+                acc += local_acc
                 loss += batch_loss.item()
 
                 
@@ -109,10 +109,11 @@ class Net(nn.Module):
 
             with torch.no_grad():
                 rand_split = random.randint(0,len(val_X)-val_batch_size)
-                val_batch = val_X[rand_split:rand_split+val_batch_size].to(device)
-                val_output = self(val_batch)
-                val_acc = self.acc_score(val_output, val_y[rand_split:rand_split + val_batch_size])
-                val_loss = _loss_function(val_output, val_y[rand_split:rand_split + val_batch_size].to(device)).item()
+                val_batch_X = val_X[rand_split:rand_split+val_batch_size].to(device)
+                val_batch_Y = val_y[rand_split:rand_split+val_batch_size].to(device)
+                val_output = self(val_batch_X)
+                val_acc = self.acc_score(val_output, val_batch_Y)
+                val_loss = _loss_function(val_output, val_batch_Y).item()
                 
             results['train_accuracies'].append(acc)
             results['train_losses'].append(loss)

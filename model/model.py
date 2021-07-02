@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import torch.nn.functional as F
 from tqdm import tqdm
 from mappings import label_mappings
-from utils import load, split
+from utils import split
 
 class Net(nn.Module):
     def __init__(self, image_size = 100, kernel_size = 3):
@@ -126,11 +126,14 @@ def create_config():
     config = {}
     parser = argparse.ArgumentParser()
     parser.add_argument('IMAGE_SIZE', type=int, help="Dimension (single) of the square image. ")
-    parser.add_argument('TRAINING_DATA_PATH', type=str, help="Path of generated training data (numpy array)")
+    parser.add_argument('TENSOR_X', type=str, help="Path of generated training samples X (tensor)")
+    parser.add_argument('TENSOR_y', type=str, help="Path of generated training labels y (tensor)")
     args = parser.parse_args()
 
     config['IMAGE_SIZE'] = args.IMAGE_SIZE
-    config['TRAINING_DATA_PATH'] = args.TRAINING_DATA_PATH
+    config['TENSOR_X'] = args.TENSOR_X
+    config['TENSOR_y'] = args.TENSOR_y
+
     return config
 
 
@@ -144,7 +147,8 @@ def main():
 
     # load the generated data into tensors
     print('Loading data...')
-    X, y = load(path = config['TRAINING_DATA_PATH'], image_size = config['IMAGE_SIZE'])
+    TENSOR_X_PATH, TENSOR_y_PATH, IMAGE_SIZE  = config['TENSOR_X'], config['TENSOR_y'], config['IMAGE_SIZE']
+    X, y = torch.load(TENSOR_X_PATH), torch.load(TENSOR_y_PATH)
 
     train_X, train_y, test_X, test_y = split(X,y, split = 0.8)
 

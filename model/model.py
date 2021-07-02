@@ -162,6 +162,7 @@ def main():
     
     axs[0].set_xlabel("No. of EPOCHS")
     axs[0].set_ylabel("Accuracy")
+    axs[0].legend()
 
     axs[1].plot(history['train_losses'], label='Training Loss')
     axs[1].plot(history['val_losses'], label='Validation Loss')
@@ -169,7 +170,7 @@ def main():
     axs[1].set_xlabel("No. of EPOCHS")
     axs[1].set_ylabel("Loss")
 
-    plt.legend()
+    axs[1].legend()
     plt.show()
 
 if __name__ == '__main__':

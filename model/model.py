@@ -18,7 +18,11 @@ class Net(nn.Module):
         
         self.conv1 = nn.Conv2d(1, 32, self.kernel_size ) # input is 1 image, 32 output channels, 5x5 kernel / window
         self.conv2 = nn.Conv2d(32, 64, self.kernel_size ) # input is 32, bc the first layer output 32. Then we say the output will be 64 channels, 5x5 kernel / window
+        self.norm1 = nn.BatchNorm2d(64)
         self.conv3 = nn.Conv2d(64, 128, self.kernel_size )
+        self.conv4 = nn.Conv2d(128, 256, self.kernel_size )
+        self.conv5 = nn.Conv2d(256, 512, self.kernel_size )
+        self.norm2 = nn.BatchNorm2d(512)
   
 
         x = torch.randn(self.image_size,self.image_size).view(-1,1,self.image_size,self.image_size)
@@ -26,16 +30,22 @@ class Net(nn.Module):
         self.convs(x)
 
         
-        self.dropout = nn.Dropout(0.2)
+        self.dropout = nn.Dropout(0.4)
         self.fc1 = nn.Linear(self._to_linear, 512) #flattening.
         self.fc2 = nn.Linear(512, 256) 
-        self.fc3 = nn.Linear(256,29)
+        self.norm1d = nn.BatchNorm1d(256)
+        self.fc3 = nn.Linear(256,len(label_mappings))
 
     def convs(self, x):
         # average pooling over 2x2
         x = F.avg_pool2d(F.relu(self.conv1(x)), (2, 2))
         x = F.avg_pool2d(F.relu(self.conv2(x)), (2, 2))
+        x = self.norm1(x)
         x = F.avg_pool2d(F.relu(self.conv3(x)), (2, 2))
+        x = F.avg_pool2d(F.relu(self.conv4(x)), (2, 2))
+        x = F.avg_pool2d(F.relu(self.conv5(x)), (2, 2))
+        x = self.norm2(x)
+        
 
         
         
@@ -48,8 +58,8 @@ class Net(nn.Module):
         x = self.dropout(x)
         x = x.view(-1, self._to_linear)  # .view is reshape ... this flattens X before 
         x = F.relu(self.fc1(x))
-        x = self.dropout(x)
         x = F.relu(self.fc2(x)) # bc this is our output layer. No activation here.
+        x = self.norm1d(x)
         x = self.fc3(x)
         return F.softmax(x, dim=1)
     

@@ -119,7 +119,7 @@ class Net(nn.Module):
             results['val_accuracies'].append(val_acc)
             results['val_losses'].append(val_loss)
 
-            t_progress_bar.set_description(f'EPOCH: {epoch},TRAIN_ACC: {round(val_acc,4)},TRAIN_LOSS: {round(loss,4)},VAL_ACC: {val_acc},VAL_LOSS: {val_loss}')
+            print(f'EPOCH: {epoch},TRAIN_ACC: {round(val_acc,4)},TRAIN_LOSS: {round(loss,4)},VAL_ACC: {val_acc},VAL_LOSS: {val_loss}')
         return results
 
 def create_config():

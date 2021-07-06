@@ -38,8 +38,8 @@ ApplicationWindow {
         Text {
             id: statusText
             text: GUIBackend.status
-            
-            anchors.horizontalCenter: parent.horizontalCenter
+            Layout.alignment: Qt.AlignCenter
+
         }
 
         Rectangle {

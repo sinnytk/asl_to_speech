@@ -39,7 +39,7 @@ def load(path, image_size=100):
 #   Tuple of tensors: (train_X, train_y, test_X, test_y)
 def split(X, y, split=0.8):
 
-    split_size =  int(len(X)*split)
+    split_size =  int(len(X)*(1-split))
 
     train_X = X[:-split_size]
     print(f"len of train_x:{len(train_X)}")

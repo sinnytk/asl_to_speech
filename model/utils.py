@@ -42,8 +42,12 @@ def split(X, y, split=0.8):
     split_size =  int(len(X)*split)
 
     train_X = X[:-split_size]
+    print(f"len of train_x:{len(train_X)}")
     train_y = y[:-split_size]
+    print(f"len of train_y:{len(train_y)}")
     test_X = X[-split_size:]
+    print(f"len of test_x:{len(test_X)}")
     test_y = y[-split_size:]
+    print(f"len of test_y:{len(test_y)}")
 
     return train_X, train_y, test_X, test_y

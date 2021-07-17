@@ -1,6 +1,7 @@
 import sys
 import cv2
 import os
+import mediapipe as mp
 
 from PySide2.QtCore import Property, QObject, QTimer, Signal, Slot
 
@@ -24,7 +25,7 @@ class AbstractStreamAdapter(QObject):
     def cv_image_to_q(self, cv_image):
         height, width, _ = cv_image.shape
         bytes_per_line = 4 * width
-        q_img = QImage(cv_image.data, width, height, bytes_per_line, QImage.Format_RGB32).rgbSwapped()
+        q_img = QImage(cv_image.data, width, height, bytes_per_line, QImage.Format_RGB32)
         return q_img
 
     def start_surface(self):
@@ -61,14 +62,46 @@ class AbstractStreamAdapter(QObject):
         return True
 
 class WebcamStream():
-    
+    hands = mp.solutions.hands.Hands(max_num_hands=1)
+    mp_drawing = mp.solutions.drawing_utils
+
     def __init__(self):
         self.cap = None
         self.open_camera()
 
     def get_frame(self):
         _, frame = self.cap.read()
-        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
+        frame = cv2.flip(frame, 1)
+        frame = self.bound_hand(frame)
+
+        frame = cv2.cvtColor(frame, cv2.COLOR_RGB2RGBA)
+        return frame
+
+    def bound_hand(self, frame):
+        h, w, c = frame.shape
+        framergb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        result = self.hands.process(framergb)
+
+        hand_landmarks = result.multi_hand_landmarks
+        handedness = result.multi_handedness
+
+        if hand_landmarks and handedness[0].classification[0].label == 'Right':
+            for handLMs in hand_landmarks:
+                x_max = 0
+                y_max = 0
+                x_min = w
+                y_min = h
+                for lm in handLMs.landmark:
+                    x, y = int(lm.x * w), int(lm.y * h)
+                    if x > x_max:
+                        x_max = x
+                    if x < x_min:
+                        x_min = x
+                    if y > y_max:
+                        y_max = y
+                    if y < y_min:
+                        y_min = y
+            cv2.rectangle(frame, (x_min-25, y_min-25), (x_max+25, y_max+25), (0, 255, 0), 2)
         return frame
 
     def open_camera(self):

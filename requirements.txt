@@ -29,9 +29,11 @@ pyasn1-modules==0.2.8
 pycodestyle==2.6.0
 pycparser==2.20
 pyOpenSSL==20.0.1
+PySide2==5.15.2
 pytz==2020.5
 requests==2.25.1
 service-identity==21.1.0
+shiboken2==5.15.2
 six==1.16.0
 sqlparse==0.4.1
 toml==0.10.2

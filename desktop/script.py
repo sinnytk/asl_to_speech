@@ -30,27 +30,17 @@ class AbstractStreamAdapter(QObject):
     def start_surface(self):
         frame = self._opencv_feed.get_frame()
         q_img = self.cv_image_to_q(frame)
-        # q_img.save(f'./setup_test.png',format=1, quality=-1)
-        # q_img = QImage('./Tarun.png')
         self._surface_format = QVideoSurfaceFormat(q_img.size(), QVideoFrame.pixelFormatFromImageFormat(q_img.format()))
-        print(self._surface_format)
         if not self._video_surface.isFormatSupported(self._surface_format):
-            print(self._video_surface.supportedPixelFormats())
             self._surface_format = self._video_surface.nearestFormat(self._surface_format)
         return self._video_surface.start(self._surface_format)
 
     @Slot()
     def get_frame(self):
-        # self.counter = (self.counter + 1) % 5
         frame = self._opencv_feed.get_frame() 
         q_img = self.cv_image_to_q(frame)
-        # choices = ['Tarun.png','Tarun2.png','Tarun3.png','Tarun4.png']
-        # q_img = QImage(f'./{choices[self.counter-1]}')
-        # q_img.save(f'./output/sample({self.counter}).png',format=1, quality=-1)
-        print(QVideoFrame.pixelFormatFromImageFormat(q_img.format()))
         a = QVideoFrame(q_img)
-        print('Present',self._video_surface.present(a))
-        print('isActive',self._video_surface.isActive())
+        self._video_surface.present(a)
 
     @Property(QAbstractVideoSurface, notify=signal_video_surface_changed)
     def videoSurface(self):
@@ -58,7 +48,6 @@ class AbstractStreamAdapter(QObject):
 
     @videoSurface.setter
     def videoSurface(self, video_surface):
-        print("video surface set")
         if self._video_surface == video_surface: 
             return
         self._video_surface = video_surface

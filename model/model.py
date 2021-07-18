@@ -164,7 +164,7 @@ def main():
     train_X, train_y, test_X, test_y = split(X,y, split = 0.8)
 
     print('Data loaded...')
-
+    print(f'Training images:{train_X.shape[0]}, Testing images :{test_X.shape[0]}')
     # Training
     print('Start training')
     history = net._train(train_X, train_y, test_X, test_y, num_of_epochs=15)

@@ -1,11 +1,8 @@
-from json import load
-from posixpath import dirname
 import cv2
 import os
 from torch_model import load_model, make_inference
-from time import sleep
 
-MODEL_PATH = '../../model/fully_connected_veri_good.pt'
+MODEL_PATH = '../../model/2x2_batchnorm_6_layers.pt'
 DIRNAME = os.path.dirname(__file__)
 
 

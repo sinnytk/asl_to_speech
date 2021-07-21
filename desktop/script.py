@@ -9,6 +9,7 @@ from PySide2.QtGui import QGuiApplication, QImage
 from PySide2.QtMultimedia import QAbstractVideoSurface, QVideoFrame, QVideoSurfaceFormat
 from PySide2.QtQml import QQmlApplicationEngine, QQmlDebuggingEnabler 
 
+from model import load_model, make_inference
 class AbstractStreamAdapter(QObject):
     signal_video_surface_changed = Signal(QAbstractVideoSurface)
 
@@ -64,7 +65,8 @@ class AbstractStreamAdapter(QObject):
 class WebcamStream():
     hands = mp.solutions.hands.Hands(max_num_hands=1)
     mp_drawing = mp.solutions.drawing_utils
-
+    # change path to model before running
+    model = load_model('../model/fully_connected_veri_good.pt')
     def __init__(self):
         self.cap = None
         self.open_camera()
@@ -102,6 +104,9 @@ class WebcamStream():
                     if y < y_min:
                         y_min = y
             cv2.rectangle(frame, (x_min-25, y_min-25), (x_max+25, y_max+25), (0, 255, 0), 2)
+            hand_frame = frame[y_min-25:y_max+25, x_min-25:x_max+25]
+            inference = make_inference(self.model, hand_frame)
+            print(inference)
         return frame
 
     def open_camera(self):

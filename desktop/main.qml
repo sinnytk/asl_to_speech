@@ -20,13 +20,13 @@ ApplicationWindow {
             Rectangle {
                 id: streamContainer
                 Layout.alignment: Qt.AlignCenter
-                color: "lightblue"
                 Layout.preferredWidth: 1200 / 2 - 5
                 Layout.preferredHeight: 650
 
                 VideoOutput {
                     visible: GUIBackend.is_feed_open
                     source: AbstractStreamAdapter
+                    anchors.fill: parent
                     
                 }
                 
@@ -34,7 +34,6 @@ ApplicationWindow {
             Rectangle {
                 id: annotationsContainer
                 Layout.alignment: Qt.AlignCenter
-                color: "lightpink"
                 Layout.preferredWidth: 1200 / 2 - 5
                 Layout.preferredHeight: 650
                 

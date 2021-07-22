@@ -1,130 +1,66 @@
 .hidden {
   display: none !important;
 }
-.upload-section {
-  margin: 0 auto;
-  border: 1px solid red;
+
+.annotation-section {
+  transition:visibility 0.3s linear,opacity 0.3s linear;
+  
 }
+
+.annotation-section #loader {
+  visibility: hidden;
+}
+
+.annotation-section.loading #loader{
+  visibility: visible;
+}
+
 .uploader {
-  display: block;
-  clear: both;
-  margin: 0 auto;
-  width: 100%;
-  max-width: 600px;
+  font-size: 1.25rem; /* 20 */
+  background-color: white;
+  position: relative;
+  padding: 100px 20px;
+  outline: 2px dashed #6d584f;
+  outline-offset: -10px;
+  -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear;
+					transition: outline-offset .15s ease-in-out, background-color .15s linear;
+
 }
-.uploader label {
-  float: left;
-  clear: both;
-  width: 100%;
-  padding: 2rem 1.5rem;
-  text-align: center;
-  background: #fff;
-  transition: all 0.2s ease;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+.uploader.is-dragover {
+  background-color: grey;
 }
-.uploader #start {
-  float: left;
-  clear: both;
-  width: 100%;
+.uploader__input__file {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
 }
-.uploader #start.hidden {
-  display: none;
-}
-.uploader #start i.fa {
-  font-size: 50px;
-  margin-bottom: 1rem;
-  transition: all 0.2s ease-in-out;
-}
-.uploader #response {
-  float: left;
-  clear: both;
-  width: 100%;
-}
-.uploader #response #messages {
-  margin-bottom: 0.5rem;
-}
-.uploader .annotation-input {
-  display: inline;
-  margin: 0 auto 0.5rem auto;
-  width: auto;
-  height: auto;
-  max-width: 42vh;
-  max-height: 32vh;
-}
-.uploader #notimage {
-  display: block;
-  float: left;
-  clear: both;
-  width: 100%;
-}
-.uploader progress,
-.uploader .progress {
-  display: inline;
-  clear: both;
-  margin: 0 auto;
-  width: 100%;
-  max-width: 180px;
-  height: 8px;
-  border: 0;
-  border-radius: 4px;
-  background-color: #eee;
+.uploader__input__file + label {
+  max-width: 80%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  display: inline-block;
   overflow: hidden;
 }
-.uploader .progress[value]::-webkit-progress-bar {
-  border-radius: 4px;
-  background-color: #eee;
+.uploader__input__file + label:hover strong,
+.uploader__input__file:focus + label strong,
+.uploader__input__file.has-focus + label strong {
+  color: #6d584f;
 }
-.uploader .progress[value]::-webkit-progress-value {
-  background: linear-gradient(to right, #393f90 0%, #454cad 50%);
-  border-radius: 4px;
+.uploader__input__file:focus + label,
+.uploader__input__file.has-focus + label {
+  outline: 1px dotted #000;
+  outline: -webkit-focus-ring-color auto 5px;
 }
-.uploader .progress[value]::-moz-progress-bar {
-  background: linear-gradient(to right, #393f90 0%, #454cad 50%);
-  border-radius: 4px;
+
+.uploader__output__image {
+  max-width: 500px;
+  max-height: 500px;
 }
-.uploader input[type="file"] {
-  display: none;
-}
-.uploader div {
-  margin: 0 0 0.5rem 0;
-  color: #5f6982;
-}
-.uploader .btn {
-  display: inline-block;
-  margin: 0.5rem 0.5rem 1rem 0.5rem;
-  clear: both;
-  font-family: inherit;
-  font-weight: 700;
-  font-size: 14px;
-  text-decoration: none;
-  text-transform: initial;
-  border: none;
-  border-radius: 0.2rem;
-  outline: none;
-  padding: 0 1rem;
-  height: 36px;
-  line-height: 36px;
-  color: #fff;
-  transition: all 0.2s ease-in-out;
-  box-sizing: border-box;
-  cursor: pointer;
-}
-.content {
-  border-radius: 7px;
-  border: 3px solid #eee;
-}
-.annotation-section {
-  display: none;
-}
-p.output.image {
-  font-size: 10em;
-}
-.output {
-  font-size: 10em;
-}
-.output.small {
-  font-size: 1em;
+
+p.output {
+  font-size: 20rem;
 }

@@ -1,8 +1,12 @@
-{% extends 'app/base_app.html' %} {% load static %} {% block headers %}
-<link rel="stylesheet" href="{% static 'app/css/base_app.css' %}" />
-<script src="{% static 'app/js/base_app.js' %}"></script>
+{% extends 'app/base_app.html' %}
+{% load static %} 
 
-{% endblock %}{% block app_details %}
+{% block extra_headers %}
+<script src="{% static 'app/js/image_app.js' %}"></script>
+{% endblock %}
+
+{% block app_details %}
+
 <div class="row justify-content-center heading"><h1>Convert image</h1></div>
 <div class="row justify-content-center subheading">
   <p class="lead">Convert any image containing ASL hand sign to annotation</p>
@@ -15,22 +19,14 @@
   action="{% url 'model:annotate_image'%}"
 >
   {% csrf_token %}
-  <input id="file-upload" type="file" name="fileUpload" accept="image/*" />
-  <label for="file-upload" id="file-drag">
-    <img id="file-image" src="#" alt="Preview" class="hidden" />
-    <div id="start">
-      <i class="fa fa-download" aria-hidden="true"></i>
-      <div>Select a image or drag here</div>
-      <div id="notimage" class="hidden">Please select an image</div>
-      <span id="file-upload-btn" class="btn btn-primary">Select a file</span>
-    </div>
-    <div id="response" class="hidden">
-      <div id="messages"></div>
-      <progress class="progress" id="file-progress" value="0">
-        <span>0</span>%
-      </progress>
-    </div>
-  </label>
+  <div class="uploader__output hidden">
+    <img class="uploader__output__image" src="" alt="Uploaded image">
+    <p></p>
+  </div>
+  <div class="uploader__input">
+    <input id="file" class="uploader__input__file" type="file" name="image" />
+    <label for="file"><strong>Choose a image</strong><span> or drag it here</span>.</label>
+  </div>
 </form>
 {% endblock %} {% block output_block %}
 <p class="output image"></p>

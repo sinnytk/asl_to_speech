@@ -1,21 +1,28 @@
-{% extends 'index.html' %} {% load static %} {% block headers %}
-<link rel="stylesheet" href="{% static 'app/css/base_app.css' %}" />
-<script src="{% static 'app/js/base_app.js' %}"></script>
+{% extends 'index.html' %} 
+{% load static %} 
 
-{% endblock %}{% block content %}
+{% block headers %}
+<link rel="stylesheet" href="{% static 'app/css/base_app.css' %}" />
+<script src="{% static 'app/js/lib.js' %}"></script>
+<script src="{% static 'app/js/base_app.js' %}"></script>
+{% block extra_headers %}
+{% endblock %}
+
+{% endblock %}
+
+{% block content %}
 
 <div class="container">
   <div class="col">{% block app_details %} {% endblock %}</div>
   <div class="row content">
-    <div class="col content-upload-section text-center">
-      <h2>Upload</h2>
+    <div class="col-6 content-upload-section text-center">
       {% block upload_form %} {% endblock %}
     </div>
 
-    <div class="col annotation-section text-center">
+    <div class="col-6 annotation-section text-center hidden">
       <h1>Annotation</h1>
       <div class="spinner-border text-primary" role="status" id="loader">
-        <span class="sr-only">Loading...</span>
+        <span class="visually-hidden">Loading...</span>
       </div>
       {% block output_block %} {% endblock %}
     </div>

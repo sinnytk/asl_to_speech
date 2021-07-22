@@ -4,10 +4,6 @@ from .utils.torch_model import make_inference
 from django.http import JsonResponse
 
 
-def index(request):
-    return JsonResponse(data={"test": "test"})
-
-
 def annotate_image(request):
     if request.method == "POST":
         img = request.FILES['image']

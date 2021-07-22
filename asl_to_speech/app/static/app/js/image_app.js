@@ -1,14 +1,14 @@
 let uploaderInputSelector = '.uploader__input'
 let uploaderOutputSelector = '.uploader__output'
 
-function showOutput(output) {
+function setOutput(output) {
     const outputBlock = $('p.output');
     outputBlock.html(output);
 }
 
 function handleNewImage(imageFile) {
     toggleDisplay(uploaderOutputSelector, true);
-    showOutput("")
+    setOutput("")
     
     showUploadedImage(imageFile, `${uploaderOutputSelector} img`, `${uploaderOutputSelector} p`);
 
@@ -21,7 +21,7 @@ function handleNewImage(imageFile) {
                 if(res.status === 200) {
                     res.json().then(
                         (json) => {
-                            showOutput(json.annotation);
+                            setOutput(json.annotation);
                         }
                     )
                 }

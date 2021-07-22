@@ -55,11 +55,17 @@
   outline: -webkit-focus-ring-color auto 5px;
 }
 
-.uploader__output__image {
+.uploader__output img,
+.uploader__output video {
   max-width: 500px;
   max-height: 500px;
 }
 
 .output.image {
   font-size: 20rem;
+}
+
+.output.video textarea {
+  width: 100%;
+  max-height: 534px;
 }

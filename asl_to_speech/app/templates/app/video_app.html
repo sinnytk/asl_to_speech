@@ -1,32 +1,35 @@
-{% extends 'app/base_app.html' %} {% load static %} {% block headers %}
-<link rel="stylesheet" href="{% static 'app/css/base_app.css' %}" />
-<script src="{% static 'app/js/base_app.js' %}"></script>
+{% extends 'app/base_app.html' %}
+{% load static %} 
 
-{% endblock %}{% block app_details %}
-<div class="row justify-content-center heading"><h1>Convert video</h1></div>
+{% block extra_headers %}
+<script src="{% static 'app/js/video_app.js' %}"></script>
+{% endblock %}
+
+{% block app_details %}
+
+<div class="row justify-content-center heading"><h1>Convert video to manuscript</h1></div>
 <div class="row justify-content-center subheading">
-  <p class="lead">Convert any video containing ASL hand signs to annotations</p>
+  <p class="lead">Convert any video containing ASL hand sign to annotations</p>
 </div>
 {% endblock %} {% block upload_form %}
-<form id="file-upload-form" class="uploader" method="POST">
+<form
+  id="file-upload-form"
+  class="uploader"
+  method="POST"
+  action="{% url 'model:annotate_video'%}"
+>
   {% csrf_token %}
-  <input id="file-upload" type="file" name="fileUpload" accept="image/*" />
-  <label for="file-upload" id="file-drag">
-    <img id="file-image" src="#" alt="Preview" class="hidden" />
-    <div id="start">
-      <i class="fa fa-download" aria-hidden="true"></i>
-      <div>Select a video or drag here</div>
-      <div id="notimage" class="hidden">Please select a video</div>
-      <span id="file-upload-btn" class="btn btn-primary">Select a file</span>
-    </div>
-    <div id="response" class="hidden">
-      <div id="messages"></div>
-      <progress class="progress" id="file-progress" value="0">
-        <span>0</span>%
-      </progress>
-    </div>
-  </label>
+  <div class="uploader__output hidden">
+    <video class="uploader__output__video" controls autoplay></video>
+    <p></p>
+  </div>
+  <div class="uploader__input">
+    <input id="file" class="uploader__input__file" type="file" name="video" />
+    <label for="file"><strong>Choose a video</strong><span> or drag it here</span>.</label>
+  </div>
 </form>
 {% endblock %} {% block output_block %}
-<p class="output small video"></p>
+<div class="output video">
+  <textarea rows="15" class="hidden"></textarea>
+</div>
 {% endblock %}

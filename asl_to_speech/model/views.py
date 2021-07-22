@@ -9,3 +9,8 @@ def annotate_image(request):
         img = request.FILES['image']
         label = make_inference(ModelConfig.model, img)
         return JsonResponse({"annotation": label})
+
+def annotate_video(request):
+    if request.method == "POST":
+        video = request.FILES['video']
+        return JsonResponse({"annotation": 'got it'})

@@ -60,6 +60,6 @@
   max-height: 500px;
 }
 
-p.output {
+.output.image {
   font-size: 20rem;
 }

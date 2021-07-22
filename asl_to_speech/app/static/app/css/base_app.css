@@ -8,11 +8,11 @@
 }
 
 .annotation-section #loader {
-  visibility: hidden;
+  display: none;
 }
 
 .annotation-section.loading #loader{
-  visibility: visible;
+  display: inline-block;
 }
 
 .uploader {

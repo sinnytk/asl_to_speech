@@ -55,12 +55,16 @@ def load_model(model_path):
 
     return model
 
-
-def make_inference(model, input_image):
+# process uploaded image
+def image_to_inference(model, img_file):
     img = cv2.imdecode(np.frombuffer(
-        input_image.read(), np.uint8), cv2.IMREAD_GRAYSCALE)
-    img = cv2.resize(img, (100, 100))/255
-    img = torch.Tensor(img).view(-1, 1, 100, 100)
-    prediction = torch.argmax(model(img))
+            img_file.read(), np.uint8), cv2.IMREAD_COLOR)
+    return make_inference(model, img);
+
+def make_inference(model, img):
+    img = cv2.resize(img, (100, 100))
+    cv2.imwrite('input.png',img)
+    img = torch.Tensor(img).permute(2, 0, 1).view(1, 3, 100, 100)
+    prediction = torch.argmax(model(img), dim=1)
     label = label_mappings[prediction.item()]
     return label

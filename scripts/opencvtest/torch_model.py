@@ -3,6 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
 import cv2
+from pre_trained_model import initialize_model, set_parameter_requires_grad
 label_mappings = {
     0: 'A',
     1: 'B',
@@ -92,24 +93,22 @@ class Net(nn.Module):
 
 
 def load_model(model_path):
-    model = Net(kernel_size=2)
+    model,input_size = initialize_model(model_name='resnet18', num_classes=29, feature_extract=False, use_pretrained=True)
     model.load_state_dict(torch.load(model_path, map_location='cpu'))
     model.eval()
+    # print(model)
 
     return model
 
+IMG_SIZE = 224
+CHANNELS = 3  # 3 for RGB 1 for Greyscale
 
 def make_inference(model, input_image):
-    if type(input_image) != np.ndarray:
-        img = cv2.imdecode(np.frombuffer(
-            input_image.read(), np.uint8), cv2.IMREAD_GRAYSCALE)
-    else:
-        img = input_image
-    img = cv2.cvtColor((img), cv2.COLOR_BGR2GRAY)
-    img = cv2.resize(img, (100, 100))/255.0
+    img = input_image
+    img = cv2.resize(img, (224, 224))
     cv2.imshow('inference_img', img)
-    img = torch.Tensor(img).view(-1, 1, 100, 100)
+    img = torch.Tensor(img).permute(2, 0, 1).view(1,CHANNELS,IMG_SIZE,IMG_SIZE)
     pred_mid = model(img)
-    prediction = torch.argmax(pred_mid)
+    prediction = torch.argmax(pred_mid,dim=1)
     label = label_mappings[prediction.item()]
     return label

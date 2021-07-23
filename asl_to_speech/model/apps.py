@@ -7,5 +7,5 @@ from .utils.torch_model import load_model
 class ModelConfig(AppConfig):
     name = 'model'
 
-    model_path = os.path.join(settings.TRAINED_MODELS, "initial_model.pt")
+    model_path = os.path.join(settings.TRAINED_MODELS, "custom_model_0.pt")
     model = load_model(model_path)

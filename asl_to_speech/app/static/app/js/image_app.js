@@ -56,6 +56,7 @@ $(document).ready(function() {
     // handle dropped image
     .on('drop', function(e) {
         const droppedImage = e.originalEvent.dataTransfer.files[0];
+        $form.addClass('uploaded');
         handleNewImage(droppedImage);
     });
 
@@ -63,6 +64,7 @@ $(document).ready(function() {
     // handle manual image upload
     $inputEl.on('change', function(e) {
         const uploadedFile = this.files[0]
+        $form.addClass('uploaded');
         handleNewImage(uploadedFile);
     });
 });

@@ -25,6 +25,10 @@
 					transition: outline-offset .15s ease-in-out, background-color .15s linear;
 
 }
+.uploader.uploaded {
+  padding: 10px 20px;
+
+}
 .uploader.is-dragover {
   background-color: grey;
 }

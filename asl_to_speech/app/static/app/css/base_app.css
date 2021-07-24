@@ -58,9 +58,15 @@
   outline: 1px dotted #000;
   outline: -webkit-focus-ring-color auto 5px;
 }
+button.btn:hover {
+  color: #6d584f;
+}
+button.btn:focus {
+  color: #6d584f;
+  box-shadow: none !important;
+}
 
-.uploader__output img,
-.uploader__output video {
+.uploader__output img {
   max-width: 500px;
   max-height: 500px;
 }

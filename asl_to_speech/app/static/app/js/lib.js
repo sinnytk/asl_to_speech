@@ -41,3 +41,19 @@ function toggleLoader(parentSelector, setLoading) {
         $elem.removeClass('loading')
     }
 }
+
+const ImageDataToBlob = function(imageData){
+    let w = imageData.width;
+    let h = imageData.height;
+    
+    let canvas = document.createElement("canvas");
+    canvas.width = w;
+    canvas.height = h;
+
+    let ctxx = canvas.getContext("2d");
+    ctxx.putImageData(imageData, 0, 0);
+
+    return new Promise((resolve, reject) => {
+            canvas.toBlob(resolve);
+    })
+}

@@ -1,55 +1,42 @@
-{% extends 'app/base_app.html' %} {% load static %} {% block headers %}
-<link rel="stylesheet" href="{% static 'app/css/base_app.css' %}" />
-<script src="{% static 'app/js/camera_app.js' %}"></script>
+{% extends 'app/base_app.html' %}
+{% load static %} 
 
-{% endblock %}{% block app_details %}
-<div class="row justify-content-center heading">
-  <h1>Convert camera input</h1>
-</div>
+{% block extra_headers %}
+<link rel="stylesheet" href="{% static 'app/css/base_app.css' %}" />
+<link rel="stylesheet" href="{% static 'app/css/camera_app.css' %}" />
+<script src="{% static 'app/js/camera_app.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.1/hands.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils@0.3/drawing_utils.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.3/camera_utils.js" crossorigin="anonymous"></script>
+{% endblock %}
+
+{% block app_details %}
+
+<div class="row justify-content-center heading"><h1>Convert image using camera</h1></div>
 <div class="row justify-content-center subheading">
-  <p class="lead">
-    Use ASL signs with your camera and convert them to annotations
-  </p>
+  <p class="lead">Use camera to input a ASL hand sign and convert it!</p>
 </div>
 {% endblock %} {% block upload_form %}
 <form
   id="file-upload-form"
   class="uploader"
   method="POST"
-  action="{% url 'model:annotate_image' %}"
+  action="{% url 'model:annotate_image'%}"
 >
   {% csrf_token %}
-  <label for="file-uploader" id="file-drag">
-    <video
-      id="file-image"
-      style="display: none"
-      class="annotation-input"
-    ></video>
-    <canvas id="rectangle" class="annotation-input"></canvas>
-    <img
-      id="photo"
-      src=""
-      alt="captured_image"
-      class="img-fluid annotation-input hidden"
-    />
-    <div id="start">
-      <i class="fa fa-download" aria-hidden="true"></i>
-      <div>Click below to start video capture</div>
-      <span id="capture-btn" class="btn btn-primary disabled hidden"
-        >Take photo</span
-      >
-      <span id="file-upload-btn" class="btn btn-primary"
-        >Start video capture</span
-      >
-    </div>
-    <div id="response" class="hidden">
-      <div id="messages"></div>
-      <progress class="progress" id="file-progress" value="0">
-        <span>0</span>%
-      </progress>
-    </div>
-  </label>
+  <div class="uploader__output hidden">
+      <video></video>
+      <div class="mediapipe__canvas__container">
+        <canvas class="mediapipe__canvas" width="600" height="350"></canvas>
+      </div>
+      <button type="button" class="btn" id="capBtn">Open camera feed</button>
+  </div>
+  <div class="uploader__input">
+    <button type="button" class="btn" id="cameraBtn">Open camera feed</button>
+  </div>
 </form>
-{% endblock %} {% block output_block %}
-<p class="output video"></p>
+{% endblock %} 
+{% block output_block %}
+<p class="output image"></p>
 {% endblock %}
+this.blur();

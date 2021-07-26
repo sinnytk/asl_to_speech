@@ -3,7 +3,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
 import cv2
-import json
 
 from .label_mapping import label_mappings
 

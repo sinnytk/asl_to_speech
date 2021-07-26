@@ -125,7 +125,20 @@ $(document).ready(function () {
   
   mediaPipeCanvasCtx = $(mediaPipeCanvasSelector)[0].getContext('2d')
 
+  $(document).keyup(function (e) {
+    // if A pressed, trigger image annotation
+    // else if C pressed, toggle camera feed
+    if(e.which === 65) {
+      if(camStream) {
+        captureFeed();
+      }
+    }
+    else if(e.which === 67) {
+      toggleCameraInput();
+    }
 
+  });
+  
   $cameraBtn.on('click', function() {
     toggleCameraInput()
     this.blur();

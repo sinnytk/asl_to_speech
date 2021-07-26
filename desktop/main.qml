@@ -36,7 +36,12 @@ ApplicationWindow {
                 Layout.alignment: Qt.AlignCenter
                 Layout.preferredWidth: 1200 / 2 - 5
                 Layout.preferredHeight: 650
-                
+                Text {
+                    text: AbstractStreamAdapter.annotation
+                    font.family: "Helvetica"
+                    font.pointSize: 24
+                    color: "red"
+                }
             }
         }
 

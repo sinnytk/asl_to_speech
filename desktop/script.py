@@ -2,6 +2,8 @@ import sys
 import cv2
 import os
 import mediapipe as mp
+from statistics import mode
+
 
 from PySide2.QtCore import Property, QObject, QTimer, Signal, Slot
 
@@ -9,9 +11,14 @@ from PySide2.QtGui import QGuiApplication, QImage
 from PySide2.QtMultimedia import QAbstractVideoSurface, QVideoFrame, QVideoSurfaceFormat
 from PySide2.QtQml import QQmlApplicationEngine, QQmlDebuggingEnabler 
 
+
 from model import load_model, make_inference
+
+model = load_model('../model/custom_model_0.pt')
+
 class AbstractStreamAdapter(QObject):
     signal_video_surface_changed = Signal(QAbstractVideoSurface)
+    annotationChanged = Signal(str)
 
     def __init__(self):
         QObject.__init__(self)
@@ -23,6 +30,10 @@ class AbstractStreamAdapter(QObject):
         self._opencv_feed = None
         self.counter = 0
 
+        self.sample_inferences = []
+        self.hand_frame_counter = 0
+        self._annotation = "No hand"
+
     def cv_image_to_q(self, cv_image):
         height, width, _ = cv_image.shape
         bytes_per_line = 4 * width
@@ -30,7 +41,7 @@ class AbstractStreamAdapter(QObject):
         return q_img
 
     def start_surface(self):
-        frame = self._opencv_feed.get_frame()
+        frame, _ = self._opencv_feed.get_frame()
         q_img = self.cv_image_to_q(frame)
         self._surface_format = QVideoSurfaceFormat(q_img.size(), QVideoFrame.pixelFormatFromImageFormat(q_img.format()))
         if not self._video_surface.isFormatSupported(self._surface_format):
@@ -39,7 +50,29 @@ class AbstractStreamAdapter(QObject):
 
     @Slot()
     def get_frame(self):
-        frame = self._opencv_feed.get_frame() 
+        frame, bounded_hand = self._opencv_feed.get_frame()
+        if bounded_hand is not None:
+            if self.annotation  == "No hand":
+                self.annotation = ''
+            self.hand_frame_counter+=1
+            
+            if self.hand_frame_counter % 3 == 0:
+                label = make_inference(model, bounded_hand)
+                print(label)
+                self.sample_inferences.append(label)
+            if self.hand_frame_counter % 30 == 0:
+                majority_annotation = mode(self.sample_inferences)
+                majority_count = self.sample_inferences.count(majority_annotation)
+                if majority_count > int(0.7 * len(self.sample_inferences)):
+                    print(f"Majority count of {majority_annotation} is greater than 70%")
+                    self.annotation += majority_annotation
+                else:
+                    print(f"Majority count of {majority_annotation} is less than 70%")
+                self.sample_inferences = []
+        else:
+            self.hand_frame_counter = 0
+            self.annotation = "No hand"
+            self.sample_inferences = []
         q_img = self.cv_image_to_q(frame)
         a = QVideoFrame(q_img)
         self._video_surface.present(a)
@@ -47,6 +80,17 @@ class AbstractStreamAdapter(QObject):
     @Property(QAbstractVideoSurface, notify=signal_video_surface_changed)
     def videoSurface(self):
         return self._video_surface
+
+    @Property(str, notify=annotationChanged)
+    def annotation(self):
+        return self._annotation
+        
+    @annotation.setter
+    def annotation(self, newAnnotation):
+        if self._annotation == newAnnotation:
+            return
+        self._annotation = newAnnotation
+        self.annotationChanged.emit(self._annotation)
 
     @videoSurface.setter
     def videoSurface(self, video_surface):
@@ -66,18 +110,17 @@ class WebcamStream():
     hands = mp.solutions.hands.Hands(max_num_hands=1)
     mp_drawing = mp.solutions.drawing_utils
     # change path to model before running
-    model = load_model('../model/fully_connected_veri_good.pt')
     def __init__(self):
         self.cap = None
         self.open_camera()
 
     def get_frame(self):
         _, frame = self.cap.read()
-        frame = cv2.flip(frame, 1)
-        frame = self.bound_hand(frame)
-
+        bounded_hand = self.bound_hand(frame)
+                    
         frame = cv2.cvtColor(frame, cv2.COLOR_RGB2RGBA)
-        return frame
+
+        return frame, bounded_hand
 
     def bound_hand(self, frame):
         h, w, c = frame.shape
@@ -87,27 +130,17 @@ class WebcamStream():
         hand_landmarks = result.multi_hand_landmarks
         handedness = result.multi_handedness
 
-        if hand_landmarks and handedness[0].classification[0].label == 'Right':
-            for handLMs in hand_landmarks:
-                x_max = 0
-                y_max = 0
-                x_min = w
-                y_min = h
-                for lm in handLMs.landmark:
-                    x, y = int(lm.x * w), int(lm.y * h)
-                    if x > x_max:
-                        x_max = x
-                    if x < x_min:
-                        x_min = x
-                    if y > y_max:
-                        y_max = y
-                    if y < y_min:
-                        y_min = y
-            cv2.rectangle(frame, (x_min-25, y_min-25), (x_max+25, y_max+25), (0, 255, 0), 2)
-            hand_frame = frame[y_min-25:y_max+25, x_min-25:x_max+25]
-            inference = make_inference(self.model, hand_frame)
-            print(inference)
-        return frame
+        hand_frame = None
+        if hand_landmarks and handedness[0].classification[0].label == 'Left':
+            wrist_landmark = hand_landmarks[0].landmark
+            wrist_origin = (int(wrist_landmark[0].x * w), int(wrist_landmark[0].y * h))
+
+            rect_start_point = (wrist_origin[0]-100, wrist_origin[1]-200)
+            rect_end_point = (wrist_origin[0]+120, wrist_origin[1]+50)
+            if rect_start_point[0] > 0 and rect_start_point [1] > 0:
+                cv2.rectangle(frame, rect_start_point, rect_end_point, (0, 255, 0), 2)
+                hand_frame = frame[rect_start_point[1]:rect_end_point[1], rect_start_point[0]:rect_end_point[0]].copy()
+        return hand_frame
 
     def open_camera(self):
         self.cap = cv2.VideoCapture(0)
@@ -136,14 +169,14 @@ class GUIBackend(QObject):
     @Property(str, notify=statusChanged)
     def status(self):
         return self._status    
-
+    
     @status.setter
     def status(self, newStatus):
         if self._status == newStatus:
             return
         self._status = newStatus
         self.statusChanged.emit(self._status)
-    
+
     @is_feed_open.setter
     def is_feed_open(self, toggle):
         if self._is_feed_open == toggle:

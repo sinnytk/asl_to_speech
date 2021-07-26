@@ -8,3 +8,4 @@ model/data
 model/.ipynb_checkpoints/
 *.pt
 *.tbh
+presentation/*
